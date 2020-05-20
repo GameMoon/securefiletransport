@@ -1,0 +1,2 @@
+ - client uses his password to encode his local rsa private key pkcs#8
+ - authprotocol status code and initator id fileds swapped
