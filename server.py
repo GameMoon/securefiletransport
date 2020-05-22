@@ -3,6 +3,8 @@ from server_src.db_controller import DBController
 from server_src.key_controller import KeyController
 from server_src.client_controller import ClientController
 
+import sys
+
 class Server:
     path = "./network/"
     password = "9uKAEfMkbWrc9Psy"
@@ -18,6 +20,9 @@ class Server:
     
      
 if __name__ == "__main__":
-    server = Server("A")
-    server.listen()
+    if len(sys.argv) < 2:
+        print(sys.argv[0], "server_addr")
+    else:
+        server = Server(sys.argv[1])
+        server.listen()
 
