@@ -57,6 +57,8 @@ class ClientController:
 
         message = MessageHandler.parse(data)
         self.client.timeout = self.get_timestamp()
+        if message.message_type == b'LOG' and self.connection_state > 0:
+            return
 
         if self.connection_state == 0:
             client_addr, raw_client_pub_key, password = AuthMessageHandler.get_login_params(message, self.key_controller.private_key)
