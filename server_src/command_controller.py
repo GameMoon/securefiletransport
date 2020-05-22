@@ -13,13 +13,13 @@ class CommandController:
     def execute(self,cmd_message,client):
         cmd = cmd_message.command.decode()
         print("Command:",cmd)
-        # try: 
-        CmdMessage.check_command(cmd)
-        cmd_args = cmd.split()
-        func = getattr(self,cmd_args[0])
-        return func(cmd_args,client)
-        # except:
-        #     return "invalid command"
+        try: 
+            CmdMessage.check_command(cmd)
+            cmd_args = cmd.split()
+            func = getattr(self,cmd_args[0])
+            return func(cmd_args,client)
+        except:
+            return "invalid command"
     
     def mkdir(self, args, client):
         p = re.compile('^(\w+\.?)*\w+$')
@@ -102,6 +102,9 @@ class CommandController:
         else: self.incoming_file = args[1]
         return ("ok",b'INC')
     
+    def disconnect(self, args, client):
+        return ("disconnect", b'TXT')
+
     def download(self, args, client):
         tmpdir = client.current_dir
         dir = args[1].split("/")
@@ -131,3 +134,4 @@ class CommandController:
         self.incoming_file = ""
         return "ok"
 
+  

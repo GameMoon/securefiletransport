@@ -16,8 +16,6 @@ class AuthMessageHandler:
             return LoginMessage(header['initiator'], raw_data[AuthMessage.header_size:])
         elif header['msg_type'] == b'RES':
             return ResponseMessage(header['initiator'],status_code,raw_data[AuthMessage.header_size:])
-        elif header['msg_type'] == b'DIS':
-            pass
         else:
             raise Exception("invalid_message_type")
 

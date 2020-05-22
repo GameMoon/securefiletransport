@@ -30,7 +30,19 @@ class ClientController:
         print("Server listening [Address: "+str(self.addr+"]"))
 
         while True:
-            self.handle_client()
+            if self.connection_state > 0 and self.get_timestamp() - self.client.timeout  > 180:
+                print("client timeout")
+                self.connection_state = 0
+                self.client.delete()
+
+            try:
+                self.handle_client()
+            except KeyboardInterrupt:
+                raise
+            except:
+                print("Message parse error")
+                self.connection_state = 0
+                self.client.delete()
 
         self.key_controller.delete_client_keys()
         self.connection_state = 0
@@ -44,6 +56,7 @@ class ClientController:
         if not status: return
 
         message = MessageHandler.parse(data)
+        self.client.timeout = self.get_timestamp()
 
         if self.connection_state == 0:
             client_addr, raw_client_pub_key, password = AuthMessageHandler.get_login_params(message, self.key_controller.private_key)
@@ -80,10 +93,9 @@ class ClientController:
                 self.client.public_key)
 
             self.network.send_msg(self.client.addr,msg)
-           
+        
 
         elif self.connection_state == 1:
-            print("Current dir", self.client.current_dir)
             # Response message parsing to CmdMessage
             message.parse(self.client.sym_key,self.client.public_key)
             response, response_type = self.cmd_controller.execute(
@@ -103,11 +115,15 @@ class ClientController:
                     self.key_controller.private_key,
                     response)
             elif response_type == b'INC':
-                print("Wait for binary")
                 self.connection_state = 2
                 return
-
+            
             self.network.send_msg(self.client.addr, msg_data)
+
+            if response == "disconnect":
+                self.connection_state = 0
+                self.client.delete()
+                return
 
         elif self.connection_state == 2:
             # Response message parsing to BinMessage
@@ -120,4 +136,6 @@ class ClientController:
                 response)
             self.network.send_msg(self.client.addr, msg_data)
             self.connection_state = 1
+
+        
             

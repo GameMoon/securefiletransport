@@ -16,13 +16,19 @@ class DBController:
         password = "test" # test password
         salt = "ZNDkeLayf7YQWJDT" # test salt
         key = self.key_controller.generate_password_hash(password.encode(),salt.encode())
+
+        password2= "test2" # test password
+        salt2 = "ZNDkeLayf7YQWJDT" # test salt
+        key2 = self.key_controller.generate_password_hash(password.encode(),salt.encode())
        
         c.execute('''CREATE TABLE users (userid, password, salt)''')
         c.execute("INSERT INTO users VALUES (?,?,?)", ('B', key, salt))
+        c.execute("INSERT INTO users VALUES (?,?,?)", ('C', key2, salt2))
 
         c.execute(
             '''CREATE TABLE folders (id INTEGER PRIMARY KEY AUTOINCREMENT, userid, name, parentid INTEGER)''')
         c.execute("INSERT INTO folders (userid,name,parentid) VALUES (?,?,?)", ('B', "/","0"))
+        c.execute("INSERT INTO folders (userid,name,parentid) VALUES (?,?,?)", ('C', "/","0"))
 
         c.execute(
             '''CREATE TABLE files (id INTEGER PRIMARY KEY AUTOINCREMENT, folderid INTEGER, name, userid, content)''')
