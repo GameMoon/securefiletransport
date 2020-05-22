@@ -14,9 +14,10 @@ class DataMessage(Message):
     @abstractmethod
     def get_data(self):
         pass
-
-    def get_timestamp(self):
-        return int(time.time()*1000)
+    
+    @staticmethod
+    def get_timestamp():
+        return int(time.time())
     
     def get_header(self):
         data = self.get_data()
@@ -27,5 +28,5 @@ class DataMessage(Message):
         result = result + pack("3s", self.message_type) # 3 bytes message type
         result = result + pack("12s", (32+len(data)+sign_len).to_bytes(12,'big')) # 12 bytes message length
         result = result + pack("6s", self.initiator.encode()) # 6 bytes initator
-        result = result + pack("10s", self.get_timestamp().to_bytes(10,'big')) # 10 bytes timestamp
+        result = result + pack("10s", DataMessage.get_timestamp().to_bytes(10,'big')) # 10 bytes timestamp
         return result
