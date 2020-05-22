@@ -8,7 +8,7 @@ class CmdMessage(DataMessage):
     command = b''
     sym_key = b''
     sign_pub_key = b''
-    command_types = {"upload": 2, "mkdir": 2, "rm": 2, "cd":2, "ls":1, "pwd": 1, "download": 2}
+    command_types = {"upload": 2, "mkdir": 2, "rm": 2, "cd":2, "ls":1, "pwd": 1, "download": 2 , "disconnect": 1}
 
     def __init__(self, initiator, raw_data = b'' ):
         super().__init__( b'TXT', initiator)

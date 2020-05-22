@@ -121,6 +121,7 @@ class ClientController:
             self.network.send_msg(self.client.addr, msg_data)
 
             if response == "disconnect":
+                print("client disconnected")
                 self.connection_state = 0
                 self.client.delete()
                 return

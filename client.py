@@ -79,8 +79,8 @@ class Client:
                         message.parse(self.sym_key,self.server_pub_key)
                         response_text = message.command.decode()
                         print(response_text)
-                        if message.command.decode == "disconnect":
-                            sys.exit(1)
+                        if message.command.decode() == "disconnect":
+                            os._exit(1)
                         self.connection_state = 2
                     except Exception(e):
                         print(str(e))
