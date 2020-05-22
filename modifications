@@ -1,2 +1,11 @@
  - client uses his password to encode his local rsa private key pkcs#8
- - authprotocol status code and initator id fileds swapped
+ - client encodes his files before sending it with a sym-key which encoded with RSA
+ - every client password has his own sym key
+ - client password sent to server in plainformat
+ - login message has only 2 types "LOG" and "RES"
+ - the full rsa key ( e, N ) sent in encoded format in the "LOG" message
+ - data message proctol handles the disconnect
+ - authprotocol status code and initator id fields swapped
+
+Test clients: "B", "C"
+passwords: test
